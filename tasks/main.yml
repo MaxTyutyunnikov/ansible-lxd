@@ -9,7 +9,9 @@
 
 - name: Install lxd
   ansible.builtin.package:
-    name: lxd
+    name:
+      - lxd
+      - python3-lxc
     state: present
   become: yes
 
@@ -41,7 +43,7 @@
 - name: Update lxd config
   ansible.builtin.command:
     cmd: lxd init --preseed
-    stdin: "{{ lxd_config | to_yaml }}"
+    stdin: "{{ lxd_config | to_nice_yaml }}"
   notify: restart_lxd
   when: lxd_config !=
     lxd_current_config.stdout |
@@ -65,6 +67,11 @@
     - subgid
   become: yes
   notify: restart_lxd
+
+- name: Create /etc/lxc
+  file:
+    path: /etc/lxc
+    state: directory
 
 - name: Set lxc default config
   ansible.builtin.template:
