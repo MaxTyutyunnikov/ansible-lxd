@@ -10,7 +10,7 @@
 - name: Install lxd
   ansible.builtin.package:
     name:
-      - lxd
+#      - lxd
       - python3-lxc
     state: present
   become: yes
@@ -33,16 +33,18 @@
     state: started
     enabled: yes
   become: yes
+  ignore_errors: yes
 
 - name: Get lxd config
-  ansible.builtin.command:
-    cmd: lxd init --dump
+  ansible.builtin.command: >
+    /snap/bin/lxd init --dump
   register: lxd_current_config
   changed_when: false
 
 - name: Update lxd config
-  ansible.builtin.command:
-    cmd: lxd init --preseed
+  ansible.builtin.command: >
+    /snap/bin/lxd init --preseed
+  args:
     stdin: "{{ lxd_config | to_nice_yaml }}"
   notify: restart_lxd
   when: lxd_config !=

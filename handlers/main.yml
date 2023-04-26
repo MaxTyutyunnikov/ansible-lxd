@@ -5,3 +5,4 @@
     state: restarted
   listen: restart_lxd
   become: yes
+  ignore_errors: yes
