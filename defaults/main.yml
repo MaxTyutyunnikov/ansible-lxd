@@ -1,4 +1,7 @@
 ---
+#    - config:
+#        source: /var/lib/lxd/storage-pools/default
+
 lxd_config:
   config: {}
   networks:
@@ -12,9 +15,7 @@ lxd_config:
       type: bridge
       project: default
   storage_pools:
-    - config:
-        source: /var/lib/lxd/storage-pools/default
-      description: ""
+    - description: ""
       name: default
       driver: dir
   profiles:
@@ -24,8 +25,9 @@ lxd_config:
       devices:
         eth0:
           name: eth0
-          network: lxdbr0
+          parent: lxdbr0
           type: nic
+          nictype: bridged
         root:
           path: /
           pool: default

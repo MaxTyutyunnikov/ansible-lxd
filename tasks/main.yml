@@ -37,13 +37,13 @@
 
 - name: Get lxd config
   ansible.builtin.command: >
-    /snap/bin/lxd init --dump
+    lxd init --dump
   register: lxd_current_config
   changed_when: false
 
 - name: Update lxd config
   ansible.builtin.command: >
-    /snap/bin/lxd init --preseed
+    lxd init --preseed
   args:
     stdin: "{{ lxd_config | to_nice_yaml }}"
   notify: restart_lxd
